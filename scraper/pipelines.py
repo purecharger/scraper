@@ -27,5 +27,8 @@ class StockCheckerPipeline(object):
         if item['inStock'] and not self.inStock(item['itemNo']):
             return item
         else:
-            raise DropItem("Stock status has not changed for item: %s" % item['itemNo'])
+            raise DropItem('stock has not changed for %s' % item['itemNo'])
             
+class EmailPipeline(object):
+    def process_item(self, item, spider):
+        print 'Found in stock item: %s' % item

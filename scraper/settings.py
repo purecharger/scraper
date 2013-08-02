@@ -15,7 +15,8 @@ NEWSPIDER_MODULE = 'scraper.spiders'
 #FEED_FORMAT = 'jsonlines'
 
 ITEM_PIPELINES = [
-    'scraper.pipelines.StockCheckerPipeline'
+    'scraper.pipelines.StockCheckerPipeline',
+    'scraper.pipelines.EmailPipeline'
 ]
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
