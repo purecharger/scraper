@@ -14,10 +14,11 @@ NEWSPIDER_MODULE = 'scraper.spiders'
 #FEED_URI = 'file:///tmp/pv.json'
 #FEED_FORMAT = 'jsonlines'
 
-ITEM_PIPELINES = [
-    'scraper.pipelines.StockCheckerPipeline',
-    'scraper.pipelines.EmailPipeline'
-]
+# Set, int value is order to run component in, low to high (valid: 0-1000)
+ITEM_PIPELINES = {
+        'scraper.pipelines.StockCheckerPipeline' : 100,
+        'scraper.pipelines.EmailPipeline' : 200
+}
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'scraper (+http://www.yourdomain.com)'

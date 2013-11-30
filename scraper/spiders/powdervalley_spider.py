@@ -1,5 +1,7 @@
 from scrapy.spider import BaseSpider
-from scrapy.selector import HtmlXPathSelector
+from scrapy.selector import Selector
+from scrapy.http import Request
+from scrapy import log
 
 from scraper.items import PVItem
 
@@ -15,12 +17,12 @@ class PowderValleySpider(BaseSpider):
     ]
 
     def parse(self, response):
-        hxs = HtmlXPathSelector(response)
-        rows = hxs.select('//form[@name="itemsform"]/table/tr')
+        sel = Selector(response)
+        rows = sel.xpath('//form[@name="itemsform"]/table/tr')
         items = []
         for row in rows:
-            values = row.select('td/font/text()').extract()
-            if len(values) == 4:
+            values = row.xpath('td/font/text()').extract()
+            if len(values) >= 4:
                 item = PVItem()
                 item['itemNo'] = values[0]
                 item['desc' ]= values[1]
@@ -30,7 +32,11 @@ class PowderValleySpider(BaseSpider):
                 else:
                     item['inStock'] = False
 
-                item['price'] = float(values[3][1:])
+                try:
+                    item['price'] = float(values[3][1:])
+                except ValueError:
+                    item['price'] = 0
+                    log.msg('ValueError! values=[%s] values[3]=%s' % (values, values[3]))
 
                 items.append(item)
 

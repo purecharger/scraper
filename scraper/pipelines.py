@@ -1,8 +1,5 @@
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/topics/item-pipeline.html
 import json
+import pprint
 from scrapy import signals
 from scrapy.exceptions import DropItem
 
@@ -26,9 +23,18 @@ class StockCheckerPipeline(object):
     def process_item(self, item, spider):
         if item['inStock'] and not self.inStock(item['itemNo']):
             return item
-        else:
-            raise DropItem('stock has not changed for %s' % item['itemNo'])
+#        else:
+#            raise DropItem('stock has not changed for %s' % item['itemNo'])
             
 class EmailPipeline(object):
+
+    def __init__(self):
+        self.items = []
+
     def process_item(self, item, spider):
-        print 'Found in stock item: %s' % item
+        #print 'EmailPipeline - Found in stock item: %s' % item
+        if item is not None:
+            self.items.append(item)
+
+    def close_spider(self, spider):
+        pprint.pprint(self.items)
